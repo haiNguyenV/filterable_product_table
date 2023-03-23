@@ -1,33 +1,62 @@
 import logo from './logo.svg';
 import './App.css';
 
-function ProductRow() {
+function ProductRow({product}) {
+  const productName = product.stocked ? product.name : <span style={{color:'red'}}>{product.name}</span>;
+
   return(
-    <></>
+    <tr>
+      <td>{productName}</td>
+      <td>{product.price}</td>
+    </tr>
   )
 }
 
-function ProductCategoryRow() {
+function ProductCategoryRow({category}) {
   return(
-    <></>
+    <tr>
+      <td colspan="2">{category}</td>
+    </tr>
   )
 }
 
-function ProductTable() {
+function ProductTable({products}) {
+  const rows = [];
+  let lastCategory = null;
+  products.map((product) => {
+    if(product.category !== lastCategory) {
+      rows.push(<ProductCategoryRow category={product.category}/>)
+    }
+    rows.push(<ProductRow product={product}/>)
+    lastCategory = product.category;
+  })
+
   return(
-    <></>
+    <table>
+        {rows}
+    </table>
   )
 }
 
 function SearchBar() {
   return(
-    <></>
+    <form>
+      <input type='text' placeholder='type your text in here...' /><br/>
+      <label>
+        <input type='checkbox' />
+        {' '}
+        <span>Only show product in stock</span>
+      </label>
+    </form>
   )
 }
 
-function FilterableProductTable() {
+function FilterableProductTable({products}) {
   return(
-    <></>
+    <div>
+      <SearchBar />
+      <ProductTable products={products} />
+    </div>
   )
 }
 
@@ -41,11 +70,7 @@ function App() {
     {category: "Vegetables", price: "$1", stocked: true, name: "Peas"}
   ];
 
-  return (
-    <div className="App">
-      thinking in react
-    </div>
-  );
+  return <FilterableProductTable products={PRODUCTS} className='box'/>;
 }
 
 export default App;

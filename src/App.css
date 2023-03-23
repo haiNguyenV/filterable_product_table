@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+
+/*custom css*/
+input[type="text"] {
+  margin-bottom: 5px;
+}
+
+input{
+  margin-bottom: 20px;
+}
+
+table, tr, th, td {
+  border: 1px solid #999;
+}
+
+th, td {
+  padding: 8px 15px;
+}
