@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import logo from './logo.svg';
 import './App.css';
 
@@ -15,35 +17,58 @@ function ProductRow({product}) {
 function ProductCategoryRow({category}) {
   return(
     <tr>
-      <td colspan="2">{category}</td>
+      <td colSpan="2" style={{fontWeight: 'bold', textAlign: 'center'}}>{category}</td>
     </tr>
   )
 }
 
-function ProductTable({products}) {
+function ProductTable({products, inputText, isChecked}) {
   const rows = [];
   let lastCategory = null;
   products.map((product) => {
-    if(product.category !== lastCategory) {
-      rows.push(<ProductCategoryRow category={product.category}/>)
+    if(isChecked && !product.stocked) {
+      return;
     }
-    rows.push(<ProductRow product={product}/>)
+    if(product.name.toLowerCase().indexOf(inputText.toLowerCase()) === -1) {
+      return;
+    }
+    if(product.category !== lastCategory) {
+      rows.push(<ProductCategoryRow 
+        category={product.category}
+        key = {product.category}
+      />)
+    }
+    rows.push(<ProductRow 
+      product={product}
+      key = {product.name}  />)
+     
     lastCategory = product.category;
   })
 
   return(
     <table>
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>price</th>
+        </tr>
+      </thead>
+      <tbody>
         {rows}
+      </tbody>
     </table>
   )
 }
 
-function SearchBar() {
+function SearchBar({inputText, setInputText, isChecked, setIsChecked}) {
+
+  console.log('inputtext: ', inputText + ' is checked: ', isChecked)
+
   return(
     <form>
-      <input type='text' placeholder='type your text in here...' /><br/>
+      <input type='text' placeholder='type your text in here...' value={inputText} onChange={e => setInputText(e.target.value)} /><br/>
       <label>
-        <input type='checkbox' />
+        <input type='checkbox' value={isChecked} onChange={e => {setIsChecked(e.target.checked)}}/>
         {' '}
         <span>Only show product in stock</span>
       </label>
@@ -52,10 +77,21 @@ function SearchBar() {
 }
 
 function FilterableProductTable({products}) {
+  const [inputText, setInputText] = useState('');
+  const [isChecked, setIsChecked] = useState(false);
+
   return(
-    <div>
-      <SearchBar />
-      <ProductTable products={products} />
+    <div className='filter_table-box'>
+      <SearchBar 
+        inputText = {inputText}
+        setInputText = {setInputText}
+        isChecked = {isChecked}
+        setIsChecked = {setIsChecked}
+      />
+      <ProductTable 
+        products={products}
+        inputText = {inputText}
+        isChecked = {isChecked} />
     </div>
   )
 }

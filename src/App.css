@@ -45,6 +45,7 @@ input[type="text"] {
 
 input{
   margin-bottom: 20px;
+  outline: none;
 }
 
 table, tr, th, td {
@@ -53,4 +54,10 @@ table, tr, th, td {
 
 th, td {
   padding: 8px 15px;
+}
+
+.filter_table-box {
+  width: 500px;
+  margin: 80px auto;
+
 }
